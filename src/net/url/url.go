@@ -433,6 +433,13 @@ func (u *Userinfo) String() string {
 // (Scheme must be [a-zA-Z][a-zA-Z0-9+-.]*)
 // If so, return scheme, path; else return "", rawurl.
 func getscheme(rawurl string) (scheme, path string, err error) {
+	if strings.IndexByte(rawurl, ':') >= 0 {
+		// Validate the scheme before returning
+		r := rawurl[0]
+		if r < 'A' || (r > 'Z' && r < 'a') || r > 'z' {
+			return "", "", errors.New("Url scheme has invalid character!!")
+		}
+	}
 	for i := 0; i < len(rawurl); i++ {
 		c := rawurl[i]
 		switch {
